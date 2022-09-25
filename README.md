@@ -1,4 +1,4 @@
-# Cpp & mysql library
+# Cpp-mysql library
 
 It`s library managmet system. I build it to gain more expirience in cpp language and in mysql.
 
