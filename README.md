@@ -24,3 +24,15 @@ const char* PASSWD = "your myqsl password";
 const char* DB_NAME = "your mysql database name";
 const int PORT = 3306; //here port number standard is 3306
 ```
+
+## MYSQL schema
+
+I added to the project file called library.sql. There are queries 
+I used to created this database.
+
+![MySQL schema screenshot](librarySchema.png?raw=true "MySQL schema screenshot")
+
+
+## Additon info
+
+I created this project to practice cpp and mysql . I don't recommend following the code written in it. If you want to use this project anyway, please let me know if you find any mistakes. My mail is kluzniakkuba@gmail.com . 
