@@ -1,6 +1,6 @@
 # Cpp-mysql library
 
-It`s library managmet system. I build it to gain more expirience in cpp language and in mysql.
+It`s console aplication build for library managmet system.It was created ,becouse I want  to gain more expirience in cpp language and in mysql.
 
 
 ## Prerequisite
@@ -32,7 +32,20 @@ I used to created this database.
 
 ![MySQL schema screenshot](librarySchema.png?raw=true "MySQL schema screenshot")
 
+## Project features
 
+* books
+  - creating books [*]
+  - showing all books by title with genre and author [*]
+  - showing last added books []
+* members 
+  - creating members []
+  - showing most active members []
+  - showing all members by name and books they borrow []
+* borrowing books 
+  - borrowing book []
+  - member cant borrow book witch is borrowed []
+  - member can borrow maximum of 5 books
 ## Additon info
 
 I created this project to practice cpp and mysql . I don't recommend following the code written in it. If you want to use this project anyway, please let me know if you find any mistakes. My mail is kluzniakkuba@gmail.com . 
