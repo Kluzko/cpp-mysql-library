@@ -40,3 +40,52 @@ int Utils::getNumber(const std::string& msg)
 	}
 	return number;
 }
+
+/*
+	Convert strings to ints.
+	@param strs - a vector of strings to conert
+*/
+std::vector<int> Utils::stringsToInts(std::vector<std::string> strs)
+{
+	std::vector<int> nums;
+	if (strs.empty()) {
+		return std::vector<int>();
+
+	}
+	for (std::string i : strs) {
+		int num = std::stoi(i);
+		nums.push_back(num);
+	}
+	return nums;
+}
+
+int Utils::getNumberFromProvided(std::vector<std::string> strs)
+{
+	//converting to ints
+	std::vector<int> nums = stringsToInts(strs);
+	
+	if (nums.empty()) {
+		return 0;
+	}
+
+	bool numberIsInVec = false;
+	int badInputNum = 0;
+	int num;
+
+	while (!numberIsInVec) {
+		if (badInputNum == 0) {
+			num = getNumber("Enter the number you have dialed: ");
+		}
+		else {
+			num = getNumber("Select number from the list. Try again: ");
+		}
+
+		for (int i : nums) {
+			if (i == num) {
+				numberIsInVec = true;
+			}
+		}
+		badInputNum++;
+	}
+	return num;
+}

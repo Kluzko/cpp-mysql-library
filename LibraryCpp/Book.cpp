@@ -6,85 +6,127 @@ using namespace library;
 /*
     This function creates book from user input.
 */
-void Book::createBook()
+bool Book::createBook()
 {
     std::cout<<"Creating book \n";
+    std::string title = getString("Title: ", 50);
 
-    std::string titile = getString("Titile: ", 100);
+    // TODO: Add to createAuthor function
     std::string genre = getString("Genre: ", 50);
-    if (!showSearchedQuery("genres", "genre", genre)) {
-        std::string choice;
-        std::cout << "No values found.Would you like to try again?\n";
-        choice = getString("Your choice (y/n): ", 1);
-
+    std::vector<std::string> genreIds;
+    //Search for genres id and get it
+    if (!showSearchedQuery("genres", "genre", genre, genreIds)) {
+        std::cout << "No values found. Would you like to try gain?\n";
+        std::string choice = getString("Your choice (y/n): ", 1);
 
         if (choice == "Y" || choice == "y") {
-            int genreRowNum = 0;
             std::string genre = getString("Genre: ", 50);
-            bool isGenreFinded = showSearchedQuery("genres", "genre", genre);
-            // if second time no value found show full list
+            bool isGenreFinded = showSearchedQuery("genres", "genre", genre, genreIds);
+            // if second time no val show full list
             if (!isGenreFinded) {
                 std::cout << "\nNo values. Here a list of available genres\n";
-                //
-                MYSQL_RES* res = exec_query("SELECT * FROM genres");
-                MYSQL_ROW row;
-                while ((row = mysql_fetch_row(res))) {
-                    std::cout << row[0] << " ) " << row[1] << '\n';
-                }
-               
-            };
-        }
-    }
-    int genreId = getNumber("Write genre number to choose it: ");
-
-    std::string author = getString("Author: ", 100);
-    std::string createdAuthorId;
-   
-    if (!showSearchedQuery("authors", "name", author)) {
-        std::string choice;
-        std::cout << "No values found.Would you like to try again?\n";
-        choice = getString("Your choice (y/n): ", 1);
-        //TODO if second time no value ask to add new author
-        if (choice == "Y" || choice == "y") {
-            int authorRowNumber = 0;
-            std::string author = getString("Author: ", 100);
-            bool isAuthorFinded = showSearchedQuery("authors", "name", author);
-            if (!isAuthorFinded) {
-                std::cout << "\nAuthor not found.Add new author\n";
-                std::string author = getString("Author: ", 100);
-                std::string query = "INSERT INTO authors(name) VALUES('" + author + "')";
-                MYSQL_RES* res = exec_query(query.c_str());
-
-                createdAuthorId = lastInsertedId();
-                
+                showFullTable("genres", genreIds);
             }
         }
+        else {
+            std::cout << "Creating book operation aborted.\n";
+            return false;
+        }
     }
-    int authorId = 0;
-   
-    if (createdAuthorId.empty()) {
-        authorId = getNumber("Write author number to choose it: ");
-    }
-    
+    std::cout << "\nChoose number from the list\n";
+    int genre_num = getNumberFromProvided(genreIds);
+    std::string genreId = std::to_string(genre_num);
 
-    // TODO: Show book before add 
+
+
+    // TODO: Add to createAuthor function
+    std::string author = getString("Author: ", 100);
+    //this var is only called when author is created
+    std::string insertedAuthorId;
+    std::vector<std::string> authorIds;
+
+    //Search for genres id and get it
+    if (!showSearchedQuery("authors", "name", author, authorIds)) {
+        std::cout << "No author found. Would you like to try gain?\n";
+        std::string choice = getString("Your choice (y/n): ", 1);
+
+        if (choice == "Y" || choice == "y") {
+            std::string author = getString("Author: ", 100);
+            bool isAuthorFinded = showSearchedQuery("authors", "name", author, authorIds);
+            // if second time no val show full list
+            if (!isAuthorFinded) {
+                std::cout << "\nNo author found.Add new author\n";
+                std::string author = getString("Author: ", 100);
+                std::string query = "INSERT INTO authors(name) VALUES('" + author + "')";
+                insertedAuthorId = insertValueAndReturnId(query);
+            }
+        }
+        else {
+            std::cout << "Creating book operation aborted.\n";
+            return false;
+        }
+    }
+    std::string authorId;
+    if (insertedAuthorId.empty()) {
+        std::cout << "\nChoose number from the list\n";
+        int author_num = getNumberFromProvided(authorIds);
+        authorId = std::to_string(author_num);
+    }
+    else {
+        authorId = insertedAuthorId;
+    }
+
+    std::cout << "Your book values\n";
+    showBookBeforeAdd(title, authorId, genreId);
+
+
     std::cout << "\nDo you want to save the book.\n";
     std::string createBookChoice = getString("Your choice (y/n): ", 1);
     if (createBookChoice == "Y" || createBookChoice == "y") {
-
-        std::string selectAuthorId = (authorId == 0) ? createdAuthorId : std::to_string(authorId);
         std::string creatBookQuery = "INSERT INTO books(title,genre_id,author_id) VALUES \
-    ('" + titile + "'," + std::to_string(genreId) + "," + selectAuthorId + ")";
-
- 
+        ('" + title + "'," + genreId + "," + authorId + ")";
         MYSQL_RES* res = exec_query(creatBookQuery.c_str());
-       
-        std::cout << "Book created successfully.";
+        if (!res) {
+            std::cout << "Creating book operation aborted.\n";
+            return false;
+        }
+        mysql_free_result(res);
+        return true;
     }
-    else {
-        std::cout << "Book not created.";
-        exit(1);
-    }
+
+    std::cout << "Creating book operation aborted.\n";
+    return false;
+}
+
+
+
+
+/*
+    Show info about book.
+    @param title - this is book title
+    @param authorId - this is author id from table authors
+    @param genreId - this is genre id from table genres
+*/
+void Book::showBookBeforeAdd(std::string title, std::string authorId, std::string genreId)
+{
+    std::string getAuthor = "SELECT authors.name FROM authors WHERE author_id = " + authorId + " ";
+    std::string getGenre = "SELECT genres.genre FROM genres WHERE genre_id = " + genreId + "";
+
+    //get values
+    MYSQL_RES* authorRes = exec_query(getAuthor.c_str());
+    MYSQL_ROW authorRow = mysql_fetch_row(authorRes);
+    std::string author = authorRow[0];
+    mysql_free_result(authorRes);
+    MYSQL_RES* genreRes = exec_query(getGenre.c_str());
+    MYSQL_ROW genreRow = mysql_fetch_row(genreRes);
+    std::string genre = genreRow[0];
+    mysql_free_result(genreRes);
+
+    std::cout << "\n====================================\n";
+    std::cout << "Title: " << title;
+    std::cout << "\nAuthor: " << author;
+    std::cout << "\nGenre: " << genre;
+    std::cout << "\n====================================\n";
 }
 
 /*
