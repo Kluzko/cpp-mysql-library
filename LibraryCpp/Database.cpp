@@ -101,3 +101,21 @@ std::string Database::insertValueAndReturnId(const std::string& query)
 	std::string id = lastInsertedId();
 	return id;
 }
+
+
+/*
+	Function to check number of rows
+	@param string query to fetch
+	@return Number of rows in query
+*/
+int Database::checkLength(std::string query)
+{
+	int len = 0;
+	MYSQL_RES* res = exec_query(query.c_str());
+	MYSQL_ROW row;
+	while ((row = mysql_fetch_row(res)) != NULL) {
+		len ++;
+	}
+	mysql_free_result(res);
+	return len;
+}

@@ -4,8 +4,8 @@
 
 int main() {
 	library::Book b;
-	b.createBook();
-	b.showAllBooks();
+	b.showLatestBooks(3);
+	
 
 	return 0;
 }

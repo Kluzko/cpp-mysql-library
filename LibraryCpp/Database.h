@@ -19,5 +19,6 @@ namespace library {
 		void showFullTable(const std::string& table, std::vector<std::string>& returnedIds);
 		std::string lastInsertedId();
 		std::string insertValueAndReturnId(const std::string& query);
+		int checkLength(std::string query);
 	};
 };
