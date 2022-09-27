@@ -11,7 +11,7 @@ void Member::createMember()
 
 	MYSQL_RES* res = exec_query(insertMember.c_str());
 	
-	std::cout << "User created succesfully";
+	std::cout << "Author successfully added to database";
 	mysql_free_result(res);
 	
 }

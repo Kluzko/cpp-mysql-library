@@ -21,20 +21,17 @@ bool Book::createBook()
 
         std::cout << "\nDo you want to save the book.\n";
         std::string createBookChoice = getString("Your choice (y/n): ", 1);
-        if (createBookChoice == "Y" || createBookChoice == "y") {
+        if ((createBookChoice == "Y") || (createBookChoice == "y")) {
             std::string creatBookQuery = "INSERT INTO books(title,genre_id,author_id) VALUES \
         ('" + title + "'," + genreId + "," + authorId + ")";
             MYSQL_RES* res = exec_query(creatBookQuery.c_str());
-            if (!res) {
-                std::cout << "Creating book operation aborted.\n";
-                return false;
-            }
+            std::cout << "Book successfully added to database.\n";
             mysql_free_result(res);
             return true;
         }
-
-        std::cout << "Creating book operation aborted.\n";
-        return false;
+            std::cout << "Creating book operation aborted.\n";
+            return false;
+       
     }
     catch (const char* msg)
     {
