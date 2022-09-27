@@ -17,6 +17,7 @@ CREATE TABLE books(
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     genre_id int,
     author_id int,
+    isBorrowed boolean NOT NULL DEFAULT FALSE,
     FOREIGN KEY (genre_id) REFERENCES genres(genre_id),
     FOREIGN KEY (author_id) REFERENCES authors(author_id)
 ); 
@@ -33,6 +34,7 @@ CREATE TABLE borrowed_books(
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     book_id int,
     member_id int,
+    isReturned boolean NOT NULL DEFAULT FALSE,
     FOREIGN KEY (book_id) REFERENCES books(book_id),
     FOREIGN KEY (member_id) REFERENCES members(member_id)
 ); 
