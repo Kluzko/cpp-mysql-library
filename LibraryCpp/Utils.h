@@ -1,4 +1,6 @@
-#pragma once
+#ifndef UTILS_H
+#define UTILS_H
+
 
 #include <iostream>
 #include <string>
@@ -12,5 +14,11 @@ public:
 	int getNumber(const std::string& msg);
 	std::vector<int> stringsToInts(std::vector<std::string> strs);
 	int getNumberFromProvided(std::vector<std::string> strs);
+	bool userChoice();
 
 };
+
+
+#endif // !UTILS_H
+
+
