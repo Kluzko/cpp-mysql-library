@@ -11,6 +11,7 @@ namespace library {
 	{
 	public:
 		void createMember();
+		std::string getMember();
 	};
 }
 
