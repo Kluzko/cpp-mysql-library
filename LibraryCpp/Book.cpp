@@ -101,19 +101,19 @@ void Book::showAllBooks()
 std::string Book::getGenre()
 {
     std::string genre = getString("Genre: ", 50);
-    std::vector<std::string> genreIds;
+    std::vector<std::string> genresId;
     //Search for genres id and get it
-    if (!showSearchedQuery("genres", "genre", genre, genreIds)) {
+    if (!showSearchedQuery("genres", "genre", genre, genresId)) {
         std::cout << "No values found. Would you like to try gain?\n";
         std::string choice = getString("Your choice (y/n): ", 1);
 
         if (choice == "Y" || choice == "y") {
             std::string genre = getString("Genre: ", 50);
-            bool isGenreFinded = showSearchedQuery("genres", "genre", genre, genreIds);
+            bool isGenreFinded = showSearchedQuery("genres", "genre", genre, genresId);
             // if second time no val show full list
             if (!isGenreFinded) {
                 std::cout << "\nNo values. Here a list of available genres\n";
-                showFullTable("genres", genreIds);
+                showFullTable("genres", genresId);
             }
         }
         else {
@@ -121,7 +121,7 @@ std::string Book::getGenre()
         }
     }
     std::cout << "\nChoose number from the list\n";
-    int genre_num = getNumberFromProvided(genreIds);
+    int genre_num = getNumberFromProvided(genresId);
 
     return std::to_string(genre_num);
 }
@@ -137,16 +137,16 @@ std::string Book::getAuthor(bool canAddNewAuthor)
     std::string author = getString("Author: ", 100);
     //this var is only called when author is created
     std::string insertedAuthorId;
-    std::vector<std::string> authorIds;
+    std::vector<std::string> authorsId;
 
     //Search for genres id and get it
-    if (!showSearchedQuery("authors", "name", author, authorIds)) {
+    if (!showSearchedQuery("authors", "name", author, authorsId)) {
         std::cout << "No author found. Would you like to try gain?\n";
         std::string choice = getString("Your choice (y/n): ", 1);
 
         if (choice == "Y" || choice == "y") {
             std::string author = getString("Author: ", 100);
-            bool isAuthorFinded = showSearchedQuery("authors", "name", author, authorIds);
+            bool isAuthorFinded = showSearchedQuery("authors", "name", author, authorsId);
             if (!isAuthorFinded && canAddNewAuthor) {
                 std::cout << "\nNo author found.Add new author\n";
                 std::string author = getString("Author: ", 100);
@@ -164,7 +164,7 @@ std::string Book::getAuthor(bool canAddNewAuthor)
     std::string authorId;
     if (insertedAuthorId.empty()) {
         std::cout << "\nChoose number from the list\n";
-        int author_num = getNumberFromProvided(authorIds);
+        int author_num = getNumberFromProvided(authorsId);
         authorId = std::to_string(author_num);
     }
     else {
@@ -252,27 +252,72 @@ bool Book::showBooksByAuthor()
     }
 }
 
+void Book::showBooksBorrowState(int limit,bool showBorrowed)
+{   
+    if (limit < 1) {
+        throw "Error: Limit should be bigger than 0";
+    }
+
+    std::string strLimit = std::to_string(limit);
+    //if borrowed books show 1 for true else false
+    std::string borrowState = (showBorrowed) ? "1" : "0";
+
+    std::string query = "SELECT books.title,authors.name,genres.genre,books.created_at FROM((books \
+        INNER JOIN genres ON books.genre_id = genres.genre_id) \
+        INNER JOIN authors ON books.author_id = authors.author_id) WHERE isBorrowed = "+ borrowState +" ORDER BY created_at DESC LIMIT " + strLimit + " ";
+
+    std::string borrowMsg = (showBorrowed) ? " borrowed books" : " not borrowed books";
+    // check length to know how many books is there
+    int len = checkLength(query.c_str());
+
+    if ( len == 0) {
+        std::cout << "Dont find any"<< borrowMsg << "\n";
+    }else {
+
+        if (len < limit) {
+            std::cout << "You have only " << len << " in your database \n";
+        }
+        MYSQL_RES* res = exec_query(query.c_str());
+        MYSQL_ROW row;
+        std::cout << "Finded " << len << borrowMsg << "\n";
+        std::cout << "===============================================\n";
+        while ((row = mysql_fetch_row(res)) != NULL) {
+            std::cout << "Title: " << row[0] << " ,Author: " << row[1] << " ,Genre: " << row[2] << " , Created at:  " << row[3] << "\n";
+        }
+        mysql_free_result(res);
+    }
+}
+
 /*
     Shows latest added books to library
     @param limit specyfie how many is going to be shown
 */
 void Book::showLatestBooks(int limit)
 {
-    if (limit > 0) {
-        std::string strLimit = std::to_string(limit);
-        std::string latestBooks = "SELECT books.title,authors.name,genres.genre,books.created_at FROM((books \
+    if (limit < 1) {
+        throw "Error: Limit should be bigger than 0";
+    }
+    std::string strLimit = std::to_string(limit);
+    std::string latestBooks = "SELECT books.title,authors.name,genres.genre,books.created_at FROM((books \
         INNER JOIN genres ON books.genre_id = genres.genre_id) \
         INNER JOIN authors ON books.author_id = authors.author_id) ORDER BY created_at DESC LIMIT " + strLimit + " ";
+
+    int len = checkLength(latestBooks.c_str());
+    if (len == 0) {
+        std::cout << "Dont find any books in your databse \n";
+    }
+    else {
+        if (len < limit) {
+            std::cout << "You have only " << len << " in your database \n";
+        }
+
         MYSQL_RES* res = exec_query(latestBooks.c_str());
         MYSQL_ROW row;
-        std::cout << "Showing "+strLimit+" latest books \n";
+        std::cout << "Finded " << len << " latest books." << "\n";
         std::cout << "===============================================\n";
         while ((row = mysql_fetch_row(res)) != NULL) {
-            std::cout << "Title: " << row[0] << " ,Author: " << row[1] << " ,Genre: " << row[2] <<" , Created at:  " << row[3] << "\n";
+            std::cout << "Title: " << row[0] << " ,Author: " << row[1] << " ,Genre: " << row[2] << " , Created at:  " << row[3] << "\n";
         }
         mysql_free_result(res);
     }
-    else {
-        throw "Limit should be bigger than 0";
-    }  
 }
