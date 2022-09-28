@@ -89,3 +89,12 @@ int Utils::getNumberFromProvided(std::vector<std::string> strs)
 	}
 	return num;
 }
+
+bool Utils::userChoice()
+{
+	std::string choice = getString("What's your choice ,type (y/n): ",1);
+	if (choice == "Y" || choice == "y")
+		return true;
+
+	return false;
+}

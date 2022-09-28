@@ -59,6 +59,27 @@ bool Database::showSearchedQuery(const std::string& table, const std::string& fi
 	return false;
 }
 
+bool Database::showSearchedBooksInLibrary(std::string searchedValue, std::vector<std::string>& returnedIds)
+{
+	int countRowNum = 0;
+	std::string query = "SELECT books.book_id,books.title FROM books WHERE title LIKE '%" + searchedValue + "%' AND isBorrowed = 0";
+	MYSQL_RES* res = exec_query(query.c_str());
+	MYSQL_ROW row;
+	while ((row = mysql_fetch_row(res)) != NULL) {
+		std::cout << row[0] << ") " << row[1] << "\n";
+		countRowNum++;
+		returnedIds.push_back(row[0]);
+	};
+
+	mysql_free_result(res);
+
+	if (countRowNum > 0) {
+		return true;
+	}
+
+	return false;
+}
+
 
 /*
 	Show all cells in choosen table [for now only for tables witch have only id and some value].

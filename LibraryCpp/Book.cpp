@@ -20,8 +20,8 @@ bool Book::createBook()
         showBookBeforeAdd(title, authorId, genreId);
 
         std::cout << "\nDo you want to save the book.\n";
-        std::string createBookChoice = getString("Your choice (y/n): ", 1);
-        if ((createBookChoice == "Y") || (createBookChoice == "y")) {
+        
+        if (userChoice()) {
             std::string creatBookQuery = "INSERT INTO books(title,genre_id,author_id) VALUES \
         ('" + title + "'," + genreId + "," + authorId + ")";
             MYSQL_RES* res = exec_query(creatBookQuery.c_str());
@@ -94,6 +94,32 @@ void Book::showAllBooks()
 }
 
 
+std::string Book::getBook()
+{
+     std::string book = getString("Title: ",100);
+     std::vector<std::string> booksId;
+     if (!showSearchedQuery("books", "title", book, booksId)) {
+         std::cout << "No values found. Would you like to try gain?\n";
+         if (userChoice()) {
+             std::string book = getString("Title: ", 100);
+             bool isGenreFinded = showSearchedQuery("books", "title", book, booksId);
+             // if second time no val show full list
+             if (!isGenreFinded) {
+                 throw "Error: Book not found";
+             }
+         }
+         else {
+             throw "Error: Book not found";
+         }
+     }
+
+     std::cout << "\nChoose number from the list\n";
+     int book_num = getNumberFromProvided(booksId);
+
+     return std::to_string(book_num);
+
+}
+
 /*
     Function to select genre
     @return genre id
@@ -104,10 +130,10 @@ std::string Book::getGenre()
     std::vector<std::string> genresId;
     //Search for genres id and get it
     if (!showSearchedQuery("genres", "genre", genre, genresId)) {
-        std::cout << "No values found. Would you like to try gain?\n";
-        std::string choice = getString("Your choice (y/n): ", 1);
+        std::cout << "Genre not found. Would you like to try gain?\n";
+       
 
-        if (choice == "Y" || choice == "y") {
+        if (userChoice()) {
             std::string genre = getString("Genre: ", 50);
             bool isGenreFinded = showSearchedQuery("genres", "genre", genre, genresId);
             // if second time no val show full list
@@ -117,7 +143,7 @@ std::string Book::getGenre()
             }
         }
         else {
-            throw "Error: No genre found";
+            throw "Error: Genre not found";
         }
     }
     std::cout << "\nChoose number from the list\n";
@@ -141,10 +167,9 @@ std::string Book::getAuthor(bool canAddNewAuthor)
 
     //Search for genres id and get it
     if (!showSearchedQuery("authors", "name", author, authorsId)) {
-        std::cout << "No author found. Would you like to try gain?\n";
-        std::string choice = getString("Your choice (y/n): ", 1);
-
-        if (choice == "Y" || choice == "y") {
+        std::cout << "Author not found. Would you like to try gain?\n";
+    
+        if (userChoice()) {
             std::string author = getString("Author: ", 100);
             bool isAuthorFinded = showSearchedQuery("authors", "name", author, authorsId);
             if (!isAuthorFinded && canAddNewAuthor) {
@@ -154,11 +179,11 @@ std::string Book::getAuthor(bool canAddNewAuthor)
                 insertedAuthorId = insertValueAndReturnId(query);
             }
             else {
-                throw "Error: No author found";
+                throw "Error:Author not found";
             }
         }
         else {
-            throw "Error: No author found";
+            throw "Error: Author not found";
         }
     }
     std::string authorId;
@@ -171,6 +196,33 @@ std::string Book::getAuthor(bool canAddNewAuthor)
         authorId = insertedAuthorId;
     }
     return authorId;
+}
+
+std::string Book::getBookInLibrary()
+{
+    
+    std::string book = getString("Title: ", 100);
+    std::vector<std::string> booksId;
+    if (!showSearchedBooksInLibrary(book, booksId)) {
+        std::cout << "No values found. Would you like to try gain?\n";
+
+        if (userChoice()) {
+            std::string book = getString("Title: ", 100);
+            bool isGenreFinded = showSearchedBooksInLibrary(book, booksId);
+            // if second time no val show full list
+            if (!isGenreFinded) {
+                throw "Error: Book not found";
+            }
+        }
+        else {
+            throw "Error: Book not found";
+        }
+    }
+
+    std::cout << "\nChoose number from the list\n";
+    int book_num = getNumberFromProvided(booksId);
+
+    return std::to_string(book_num);
 }
 
 /*

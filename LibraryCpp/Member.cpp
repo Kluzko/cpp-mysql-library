@@ -22,9 +22,7 @@ std::string Member::getMember()
     //Search for genres id and get it
     if (!showSearchedQuery("members", "name", member, membersId)) {
         std::cout << "No values found. Would you like to try gain?\n";
-        std::string choice = getString("Your choice (y/n): ", 1);
-
-        if (choice == "Y" || choice == "y") {
+        if (userChoice()) {
             std::string member = getString("Name: ", 100);
             bool isGenreFinded = showSearchedQuery("members", "name", member, membersId);
 
@@ -40,4 +38,38 @@ std::string Member::getMember()
     int member_num = getNumberFromProvided(membersId);
 
 	return std::to_string(member_num);
+}
+
+bool Member::canBorrowNewBook(bool printInfo, std::string memberId)
+{
+    if (memberId.empty()){
+        throw "You need to provide memberId \n";
+    }
+    int numOfBorrowedBooks = 0;
+
+    std::string borrowedBooksQuery = "SELECT books.title,borrowed_books.created_at FROM((borrowed_books\
+        INNER JOIN books ON borrowed_books.book_id = books.book_id)\
+        INNER JOIN members ON borrowed_books.member_id = members.member_id)\
+        WHERE borrowed_books.member_id = "+memberId+" AND borrowed_books.isReturned = 1";
+
+    int len = checkLength(borrowedBooksQuery.c_str());
+
+    //printInfo == true print borrowed books
+    if (len > 0 && printInfo) {
+        MYSQL_RES* res = exec_query(borrowedBooksQuery.c_str());
+        MYSQL_ROW row;
+        std::cout << "You have " << len << " books to return ! \n";
+        std::cout << "===============================================\n";
+        while ((row = mysql_fetch_row(res)) != NULL) {
+            std::cout << "Title " << row[0] << "Borrowed " << row[1] << "\n";
+        }
+    }
+
+
+    // If user has less than 5 not returned books can borrow book
+    if (len <= MAX_NUM_OF_BORROWED_BOOKS) {
+        return true;
+    }
+
+    return false;
 }

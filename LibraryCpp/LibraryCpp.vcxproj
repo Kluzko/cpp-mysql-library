@@ -132,6 +132,7 @@
   <ItemGroup>
     <ClCompile Include="Book.cpp" />
     <ClCompile Include="Database.cpp" />
+    <ClCompile Include="LibraryManagment.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Member.cpp" />
     <ClCompile Include="Utils.cpp" />
@@ -140,6 +141,7 @@
     <ClInclude Include="Book.h" />
     <ClInclude Include="Credentials.h" />
     <ClInclude Include="Database.h" />
+    <ClInclude Include="LibraryManagment.h" />
     <ClInclude Include="Member.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
