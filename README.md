@@ -37,9 +37,9 @@ I used to created this database.
 * books
   - creating books [*]
   - showing all books by title with genre and author [*]
-  - showing last added books []
+  - showing last added books [*]
 * members 
-  - creating members []
+  - creating members [*]
   - showing most active members []
   - showing all members by name and books they borrow []
 * borrowing books 
