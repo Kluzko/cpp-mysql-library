@@ -17,6 +17,8 @@ namespace library {
 		int numOfBorrowedBook(std::string memberId);
 		bool canBorrowNewBook(bool printInfo, std::string memberId);
 		std::string getBrrowedBookId(std::string memberId);
+		void showAllMembers();
+		void showMostActiveMembers(int limit);
 
 	private:
 		unsigned int MAX_NUM_OF_BORROWED_BOOKS = 5;

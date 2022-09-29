@@ -80,7 +80,7 @@ void Book::showAllBooks()
 	std::cout << "Showing books available in library\n";
 	std::cout << "===============================================\n";
 	while ((row = mysql_fetch_row(res)) != NULL) {
-		std::cout << "Title: " << row[0] << " ,Author: " << row[1] << " ,Genre: " << row[2] << "\n";
+		std::cout << "Title: " << row[0] << " | Author: " << row[1] << " | Genre: " << row[2] << "\n";
 	}
 
 	mysql_free_result(res);
@@ -234,7 +234,7 @@ bool Book::showBooksByCategory()
 			std::cout << "Find " << len << " books for this category \n";
 			std::cout << "===============================================\n";
 			while ((row = mysql_fetch_row(res)) != NULL) {
-				std::cout << "Title: " << row[0] << " ,Author: " << row[1] << " ,Genre: " << row[2] << "\n";
+				std::cout << "Title: " << row[0] << " | Author: " << row[1] << " | Genre: " << row[2] << "\n";
 			}
 
 			return true;
@@ -271,7 +271,7 @@ bool Book::showBooksByAuthor()
 			std::cout << "Find" << len << "books by this author \n";
 			std::cout << "===============================================\n";
 			while ((row = mysql_fetch_row(res)) != NULL) {
-				std::cout << "Title: " << row[0] << " ,Author: " << row[1] << " ,Genre: " << row[2] << "\n";
+				std::cout << "Title: " << row[0] << " | Author: " << row[1] << " | Genre: " << row[2] << "\n";
 			}
 			mysql_free_result(res);
 			return true;
@@ -317,7 +317,7 @@ void Book::showBooksBorrowState(int limit, bool showBorrowed)
 		std::cout << "Finded " << len << borrowMsg << "\n";
 		std::cout << "===============================================\n";
 		while ((row = mysql_fetch_row(res)) != NULL) {
-			std::cout << "Title: " << row[0] << " ,Author: " << row[1] << " ,Genre: " << row[2] << " , Created at:  " << row[3] << "\n";
+			std::cout << "Title: " << row[0] << " | Author: " << row[1] << "| Genre: " << row[2] << " | Created at:  " << row[3] << "\n";
 		}
 		mysql_free_result(res);
 	}
@@ -351,7 +351,7 @@ void Book::showLatestBooks(int limit)
 		std::cout << "Finded " << len << " latest books." << "\n";
 		std::cout << "===============================================\n";
 		while ((row = mysql_fetch_row(res)) != NULL) {
-			std::cout << "Title: " << row[0] << " ,Author: " << row[1] << " ,Genre: " << row[2] << " , Created at:  " << row[3] << "\n";
+			std::cout << "Title: " << row[0] << " | Author: " << row[1] << " | Genre: " << row[2] << " | Created at:  " << row[3] << "\n";
 		}
 		mysql_free_result(res);
 	}

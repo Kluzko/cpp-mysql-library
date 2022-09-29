@@ -114,3 +114,39 @@ std::string Member::getBrrowedBookId(std::string memberId)
 
 	return std::to_string(book_num);
 }
+
+void Member::showAllMembers()
+{
+	std::string query = "SELECT member_id,name,created_at FROM members";
+	MYSQL_RES* res = exec_query(query.c_str());
+	MYSQL_ROW row;
+	while ((row = mysql_fetch_row(res)) != NULL) {
+		std::cout << row[0] << ")" << " Member name: " << row[1] << " | created_at: " << row[2] << "\n";
+	}
+	mysql_free_result(res);
+}
+
+void library::Member::showMostActiveMembers(int limit)
+{
+	std::string strLimit = std::to_string(limit);
+
+	std::string query = "SELECT members.name,COUNT(*) FROM((borrowed_books\
+		INNER JOIN books ON borrowed_books.book_id = books.book_id)\
+		INNER JOIN members ON borrowed_books.member_id = members.member_id)\
+		GROUP BY members.name LIMIT "+ strLimit +" ";
+
+	int len = checkLength(query.c_str());
+	if (len < 0) {
+		throw "No members found";
+	}
+	if (limit > len) {
+		std::cout << "Found only " << len << " members \n";
+	}
+	
+	MYSQL_RES* res = exec_query(query.c_str());
+	MYSQL_ROW row;
+	while ((row = mysql_fetch_row(res)) != NULL) {
+		std::cout <<"Member name: " << row[0] << " | books borrowed: " << row[1] << "\n";
+	}
+	mysql_free_result(res);
+}
