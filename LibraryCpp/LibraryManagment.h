@@ -18,6 +18,7 @@ namespace library {
 
 	public:
 		void borrowBook();
+		void returnTheBook();
 	};
 }
 

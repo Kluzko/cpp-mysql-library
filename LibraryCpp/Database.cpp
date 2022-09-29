@@ -80,6 +80,28 @@ bool Database::showSearchedBooksInLibrary(std::string searchedValue, std::vector
 	return false;
 }
 
+std::vector<std::string> library::Database::returnBooksBorrowedByUser(std::string memberId)
+{
+	std::vector<std::string> returnIDs;
+
+	std::string borrowedBooksQuery = "SELECT borrowed_books.borrowedBooks_id FROM((borrowed_books\
+        INNER JOIN books ON borrowed_books.book_id = books.book_id)\
+        INNER JOIN members ON borrowed_books.member_id = members.member_id)\
+        WHERE borrowed_books.member_id = " + memberId + " AND borrowed_books.isReturned = 0";
+
+	MYSQL_RES* res = exec_query(borrowedBooksQuery.c_str());
+	MYSQL_ROW row;
+	
+	while ((row = mysql_fetch_row(res)) != NULL) {
+		returnIDs.push_back(row[0]);
+	}
+	mysql_free_result(res);
+
+	return returnIDs;
+}
+
+
+
 
 /*
 	Show all cells in choosen table [for now only for tables witch have only id and some value].

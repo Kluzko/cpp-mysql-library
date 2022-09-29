@@ -9,6 +9,7 @@
 #include "Database.h"
 #include "Utils.h"
 
+
 namespace library {
 	class Book :protected Database, protected Utils
 	{
@@ -20,6 +21,7 @@ namespace library {
 		std::string getGenre();
 		std::string getAuthor(bool canAddNewAuthor);
 		std::string getBookInLibrary();
+		
 
 
 		bool showBooksByCategory();
@@ -28,6 +30,8 @@ namespace library {
 		void showBooksBorrowState(int limit, bool showBorrowed);
 		void showLatestBooks(int limit);
 		void showAllBooks();
+
+		
 
 
 	};
