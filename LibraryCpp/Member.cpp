@@ -50,7 +50,7 @@ bool Member::canBorrowNewBook(bool printInfo, std::string memberId)
     std::string borrowedBooksQuery = "SELECT books.title,borrowed_books.created_at FROM((borrowed_books\
         INNER JOIN books ON borrowed_books.book_id = books.book_id)\
         INNER JOIN members ON borrowed_books.member_id = members.member_id)\
-        WHERE borrowed_books.member_id = "+memberId+" AND borrowed_books.isReturned = 1";
+        WHERE borrowed_books.member_id = "+memberId+" AND borrowed_books.isReturned = 0";
 
     int len = checkLength(borrowedBooksQuery.c_str());
 
