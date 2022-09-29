@@ -1,10 +1,6 @@
 #include "LibraryManagment.h"
 
-
-
 using namespace library;
-
-
 
 void LibraryManagment::borrowBook()
 {
@@ -12,7 +8,7 @@ void LibraryManagment::borrowBook()
 	{
 		std::string memberId = getMember();
 
-		if (!canBorrowNewBook(true,memberId)) {
+		if (!canBorrowNewBook(true, memberId)) {
 			throw "\n You need to return books you borrowed to get new one. \n";
 		}
 
@@ -21,16 +17,15 @@ void LibraryManagment::borrowBook()
 		std::cout << "Do you want to borrow this book.";
 
 		// TODO: IDK why i need to get it like library::[some class] not from class fix here
-	
-		if (library::Book::userChoice()) {
 
+		if (library::Book::userChoice()) {
 			//update book to borrowed
 			std::string setBookToBorrowed = "UPDATE books SET isBorrowed = 1 WHERE book_id = " + bookId + "";
 			MYSQL_RES* bookBorrowRes = library::Database::exec_query(setBookToBorrowed.c_str());
 			mysql_free_result(bookBorrowRes);
-			
+
 			//insert query
-			std::string borrowBook = "INSERT INTO borrowed_books(book_id,member_id) VALUES(' "+bookId+" ', ' "+memberId+"' )";
+			std::string borrowBook = "INSERT INTO borrowed_books(book_id,member_id) VALUES(' " + bookId + " ', ' " + memberId + "' )";
 			MYSQL_RES* insertBorrowedBook = library::Database::exec_query(borrowBook.c_str());
 			mysql_free_result(insertBorrowedBook);
 			std::cout << "Successful borrowing of a book \n";
@@ -38,9 +33,8 @@ void LibraryManagment::borrowBook()
 		else {
 			throw "Borrowing book operation aborted.";
 		}
-		
 	}
-	catch (const char * msg)
+	catch (const char* msg)
 	{
 		std::cout << msg << "\n";
 	}
@@ -57,14 +51,14 @@ void LibraryManagment::returnTheBook()
 			throw "You have no books to return.\n";
 		}
 
-		std::string brrowedBookId =  getBrrowedBookId(memberId);
+		std::string brrowedBookId = getBrrowedBookId(memberId);
 
 		std::cout << "Do you want to return this book.";
 
 		// TODO: IDK why i need to get it like library::[some class] not from class fix here
 
 		if (library::Book::userChoice()) {
-			// change borrowedBook to returned 
+			// change borrowedBook to returned
 			std::string changeBorrowedBookToReturned = "UPDATE borrowed_books SET isReturned = 1 WHERE borrowedBooks_id = " + brrowedBookId + "";
 			MYSQL_RES* bookBorrowRes = library::Database::exec_query(changeBorrowedBookToReturned.c_str());
 			mysql_free_result(bookBorrowRes);
@@ -78,7 +72,6 @@ void LibraryManagment::returnTheBook()
 			std::string setBookToReturned = "UPDATE books SET isBorrowed = 0 WHERE book_id = " + bookId + "";
 			MYSQL_RES* bookReturnRes = library::Database::exec_query(setBookToReturned.c_str());
 			mysql_free_result(bookReturnRes);
-
 		}
 		else {
 			throw "Returning book operation aborted.";
@@ -87,5 +80,5 @@ void LibraryManagment::returnTheBook()
 	catch (const char* msg)
 	{
 		std::cout << msg << "\n";
-	}	
+	}
 }

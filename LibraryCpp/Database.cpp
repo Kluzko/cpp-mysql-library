@@ -13,7 +13,6 @@ Database::Database()
 	_conn = conn;
 }
 
-
 /*
 		Execute inputed query
 		@param query - query to execute
@@ -22,14 +21,13 @@ Database::Database()
 MYSQL_RES* Database::exec_query(const char* query)
 {
 	//return true if some error
-	
+
 	if (mysql_query(_conn, query)) {
 		std::cout << "Query error: " << mysql_error(_conn) << std::endl;
 		exit(1);
 	}
 	return mysql_use_result(_conn);
 }
-
 
 /*
 Searching for inputed filed
@@ -38,7 +36,7 @@ Searching for inputed filed
 @param searchedValue - value you want to find in database
 @return bool , if query finded true else false
 */
-bool Database::showSearchedQuery(const std::string& table, const std::string& field, std::string searchedValue,std::vector<std::string> &returnedIds)
+bool Database::showSearchedQuery(const std::string& table, const std::string& field, std::string searchedValue, std::vector<std::string>& returnedIds)
 {
 	int countRowNum = 0;
 	std::string query = "SELECT * FROM " + table + " WHERE " + field + " LIKE '%" + searchedValue + "%'";
@@ -91,7 +89,7 @@ std::vector<std::string> library::Database::returnBooksBorrowedByUser(std::strin
 
 	MYSQL_RES* res = exec_query(borrowedBooksQuery.c_str());
 	MYSQL_ROW row;
-	
+
 	while ((row = mysql_fetch_row(res)) != NULL) {
 		returnIDs.push_back(row[0]);
 	}
@@ -99,9 +97,6 @@ std::vector<std::string> library::Database::returnBooksBorrowedByUser(std::strin
 
 	return returnIDs;
 }
-
-
-
 
 /*
 	Show all cells in choosen table [for now only for tables witch have only id and some value].
@@ -126,7 +121,7 @@ void Database::showFullTable(const std::string& table, std::vector<std::string>&
 */
 std::string Database::lastInsertedId()
 {
-	MYSQL_RES * res = exec_query("SELECT last_insert_id()");
+	MYSQL_RES* res = exec_query("SELECT last_insert_id()");
 	MYSQL_ROW row = mysql_fetch_row(res);
 	std::string id = row[0];
 	mysql_free_result(res);
@@ -139,12 +134,11 @@ std::string Database::lastInsertedId()
 */
 std::string Database::insertValueAndReturnId(const std::string& query)
 {
-	MYSQL_RES * res = exec_query(query.c_str());
+	MYSQL_RES* res = exec_query(query.c_str());
 	mysql_free_result(res);
 	std::string id = lastInsertedId();
 	return id;
 }
-
 
 /*
 	Function to check number of rows
@@ -157,7 +151,7 @@ int Database::checkLength(std::string query)
 	MYSQL_RES* res = exec_query(query.c_str());
 	MYSQL_ROW row;
 	while ((row = mysql_fetch_row(res)) != NULL) {
-		len ++;
+		len++;
 	}
 	mysql_free_result(res);
 	return len;

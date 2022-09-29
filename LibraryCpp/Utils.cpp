@@ -41,6 +41,18 @@ int Utils::getNumber(const std::string& msg)
 	return number;
 }
 
+int Utils::getNumberWithLimit(const std::string& msg, int limit)
+{
+	int number = 0;
+	std::cout << msg;
+	while ((!(std::cin >> number)) || number > limit)
+	{
+		std::cin.clear();
+		std::cin.ignore(INT_MAX, '\n');
+	}
+	return number;
+}
+
 /*
 	Convert strings to ints.
 	@param strs - a vector of strings to conert
@@ -50,7 +62,6 @@ std::vector<int> Utils::stringsToInts(std::vector<std::string> strs)
 	std::vector<int> nums;
 	if (strs.empty()) {
 		return std::vector<int>();
-
 	}
 	for (std::string i : strs) {
 		int num = std::stoi(i);
@@ -63,7 +74,7 @@ int Utils::getNumberFromProvided(std::vector<std::string> strs)
 {
 	//converting to ints
 	std::vector<int> nums = stringsToInts(strs);
-	
+
 	if (nums.empty()) {
 		return 0;
 	}
@@ -92,7 +103,7 @@ int Utils::getNumberFromProvided(std::vector<std::string> strs)
 
 bool Utils::userChoice()
 {
-	std::string choice = getString("What's your choice ,type (y/n): ",1);
+	std::string choice = getString("What's your choice ,type (y/n): ", 1);
 	if (choice == "Y" || choice == "y")
 		return true;
 

@@ -26,8 +26,4 @@ namespace library {
 	};
 };
 
-
 #endif // !DATABASE_H
-
-
-

@@ -15,19 +15,12 @@ namespace library {
 		std::string getMember();
 		void printBorrowedBooks(std::string memberId);
 		int numOfBorrowedBook(std::string memberId);
-		bool canBorrowNewBook(bool printInfo,std::string memberId);
+		bool canBorrowNewBook(bool printInfo, std::string memberId);
 		std::string getBrrowedBookId(std::string memberId);
-		
-		
 
 	private:
 		unsigned int MAX_NUM_OF_BORROWED_BOOKS = 5;
 	};
 }
 
-
 #endif // !MEMBER_H
-
-
-
-
