@@ -196,6 +196,7 @@ void Database::readFromDatabase(const std::string query)
 				size_t findedId = tableNames[i].find("_id");
 				size_t findIsBorrowed = tableNames[i].find("isBorrowed");
 				size_t findIsReturned = tableNames[i].find("isReturned");
+				size_t findCount = tableNames[i].find("COUNT(*)");
 
 				if (findedId != std::string::npos) {
 					std::cout << row[i] << ") ";
@@ -217,7 +218,9 @@ void Database::readFromDatabase(const std::string query)
 							std::cout << tableNames[i] << ": " << "Yes" << " | ";
 						}
 					}
-					
+				}
+				else if (findCount != std::string::npos) {
+					std::cout <<"borrowed: " << row[i];
 				}
 				else if (i == size -1) {
 					std::cout << tableNames[i] << ": " << row[i];

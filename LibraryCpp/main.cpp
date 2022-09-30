@@ -37,9 +37,10 @@ int main() {
 			std::cout << "7) Show books by author\n";
 			std::cout << "8) Show books by genre\n";
 			std::cout << "9) Show 5 most active members\n";
-			std::cout << "10) Show 20 latest books\n";
-			std::cout << "11) Show books 20 last borrowed books\n\n";
-			int num =getNumberWithLimit("Your choice: ", 11);
+			std::cout << "10) Show 5 most frequently borrowed books\n";
+			std::cout << "11) Show 20 latest books\n";
+			std::cout << "12) Show books 20 last borrowed books\n\n";
+			int num =getNumberWithLimit("Your choice: ", 12);
 
 			switch (num)
 			{
@@ -108,6 +109,13 @@ int main() {
 				break;
 			}
 			case 10: {
+				std::cout << "\nShowing 5 most frequently borrowed books\n";
+				std::cout << "\n====================================\n";
+				b.showMostBorrowedBooks(5);
+				std::cout << "\n====================================\n";
+				break;
+			}
+			case 11: {
 				//TODO add option to choose limit
 				std::cout << "\nShowing 20 latest books\n";
 				std::cout << "\n====================================\n";
@@ -115,7 +123,7 @@ int main() {
 				std::cout << "\n====================================\n";
 				break;	
 			}
-			case 11: {
+			case 12: {
 				//TODO add option to choose limit
 				std::cout << "\nShowing books 20 last borrowed books\n";
 				std::cout << "\n====================================\n";

@@ -332,3 +332,28 @@ void Book::showLatestBooks(int limit)
 		readFromDatabase(latestBooks);
 	}
 }
+
+void Book::showMostBorrowedBooks(int limit)
+{
+	if (limit < 1) {
+		throw "Error: Limit should be bigger than 0";
+	}
+	std::string strLimit = std::to_string(limit);
+	std::string mostBorrowedBooks = "SELECT books.title, COUNT(*) FROM((borrowed_books\
+			INNER JOIN books ON borrowed_books.book_id = books.book_id)\
+			INNER JOIN members ON borrowed_books.member_id = members.member_id)\
+		GROUP BY books.title LIMIT " + strLimit + " ";
+
+	int len = checkLength(mostBorrowedBooks.c_str());
+	
+	if (len < 0) {
+		throw "No members found";
+	}
+	if (limit > len) {
+		std::cout << "Found only " << len << " members \n";
+	}
+	
+	std::cout << "Finded " << len << " latest books." << "\n";
+	std::cout << "===============================================\n";
+	readFromDatabase(mostBorrowedBooks);
+}

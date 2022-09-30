@@ -25,6 +25,7 @@ namespace library {
 
 		void showBooksBorrowState(int limit, bool showBorrowed);
 		void showLatestBooks(int limit);
+		void showMostBorrowedBooks(int limit);
 		void showAllBooks();
 	};
 };

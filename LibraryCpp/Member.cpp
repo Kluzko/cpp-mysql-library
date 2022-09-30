@@ -129,10 +129,5 @@ void library::Member::showMostActiveMembers(int limit)
 		std::cout << "Found only " << len << " members \n";
 	}
 	
-	MYSQL_RES* res = exec_query(query.c_str());
-	MYSQL_ROW row;
-	while ((row = mysql_fetch_row(res)) != NULL) {
-		std::cout <<"Member name: " << row[0] << " | books borrowed: " << row[1] << "\n";
-	}
-	mysql_free_result(res);
+	readFromDatabase(query);
 }
