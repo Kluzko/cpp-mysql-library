@@ -8,7 +8,7 @@
 #include "Utils.h"
 
 namespace library {
-	class Member : protected Database, protected Utils
+	class Member : protected Database
 	{
 	public:
 		void createMember();

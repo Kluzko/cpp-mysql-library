@@ -6,7 +6,7 @@ This function takes user input check if it`s correct , if so return it.
 @param maxLen - maximal length of inputed by user string
 @return string
 */
-const std::string Utils::getString(const std::string& msg, int maxLen)
+const std::string getString(const std::string& msg, int maxLen)
 {
 	std::string s;
 	std::cout << msg;
@@ -29,7 +29,7 @@ This function takes user input check if it`s int , if so return it.
 @param msg - message to show for user in console
 @return int
 */
-int Utils::getNumber(const std::string& msg)
+int getNumber(const std::string& msg)
 {
 	int number = 0;
 	std::cout << msg;
@@ -41,7 +41,7 @@ int Utils::getNumber(const std::string& msg)
 	return number;
 }
 
-int Utils::getNumberWithLimit(const std::string& msg, int limit)
+int getNumberWithLimit(const std::string& msg, int limit)
 {
 	int number = 0;
 	std::cout << msg;
@@ -57,7 +57,7 @@ int Utils::getNumberWithLimit(const std::string& msg, int limit)
 	Convert strings to ints.
 	@param strs - a vector of strings to conert
 */
-std::vector<int> Utils::stringsToInts(std::vector<std::string> strs)
+std::vector<int> stringsToInts(std::vector<std::string> strs)
 {
 	std::vector<int> nums;
 	if (strs.empty()) {
@@ -70,7 +70,7 @@ std::vector<int> Utils::stringsToInts(std::vector<std::string> strs)
 	return nums;
 }
 
-int Utils::getNumberFromProvided(std::vector<std::string> strs)
+int getNumberFromProvided(std::vector<std::string> strs)
 {
 	//converting to ints
 	std::vector<int> nums = stringsToInts(strs);
@@ -101,7 +101,7 @@ int Utils::getNumberFromProvided(std::vector<std::string> strs)
 	return num;
 }
 
-bool Utils::userChoice()
+bool userChoice()
 {
 	std::string choice = getString("What's your choice ,type (y/n): ", 1);
 	if (choice == "Y" || choice == "y")
@@ -109,3 +109,4 @@ bool Utils::userChoice()
 
 	return false;
 }
+

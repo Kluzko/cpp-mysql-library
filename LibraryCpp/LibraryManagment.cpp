@@ -18,7 +18,7 @@ void LibraryManagment::borrowBook()
 
 		// TODO: IDK why i need to get it like library::[some class] not from class fix here
 
-		if (library::Book::userChoice()) {
+		if (userChoice()) {
 			//update book to borrowed
 			std::string setBookToBorrowed = "UPDATE books SET isBorrowed = 1 WHERE book_id = " + bookId + "";
 			MYSQL_RES* bookBorrowRes = library::Database::exec_query(setBookToBorrowed.c_str());
@@ -57,7 +57,7 @@ void LibraryManagment::returnTheBook()
 
 		// TODO: IDK why i need to get it like library::[some class] not from class fix here
 
-		if (library::Book::userChoice()) {
+		if (userChoice()) {
 			// change borrowedBook to returned
 			std::string changeBorrowedBookToReturned = "UPDATE borrowed_books SET isReturned = 1 WHERE borrowedBooks_id = " + brrowedBookId + "";
 			MYSQL_RES* bookBorrowRes = library::Database::exec_query(changeBorrowedBookToReturned.c_str());

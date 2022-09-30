@@ -3,12 +3,13 @@
 #include "Book.h"
 #include "Member.h"
 #include "LibraryManagment.h"
+#include "Utils.h"
 
 int main() {
 	library::LibraryManagment lib;
 	library::Member m;
 	library::Book b;
-	Utils u;
+	
 
 	std::cout << "Welcome in console libary managment system \n";
 	std::cout << "Choose options from the list \n";
@@ -37,7 +38,7 @@ int main() {
 			std::cout << "9) Show 5 most active members\n";
 			std::cout << "10) Show 20 latest books\n";
 			std::cout << "11) Show books 20 last borrowed books\n\n";
-			int num = u.getNumberWithLimit("Your choice: ", 10);
+			int num =getNumberWithLimit("Your choice: ", 10);
 
 			switch (num)
 			{
@@ -125,7 +126,7 @@ int main() {
 				break;
 			}
 
-			choice = u.getString("Do you want to search again (y/n): ", 1);
+			choice = getString("Do you want to search again (y/n): ", 1);
 		} while (choice == "Y" || choice == "y");
 	}
 	catch (const char* msg)

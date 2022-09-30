@@ -6,6 +6,7 @@
 
 #include "Book.h"
 #include "Member.h"
+#include "Utils.h"
 
 namespace library {
 	class LibraryManagment : protected Member, protected Book

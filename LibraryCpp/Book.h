@@ -9,7 +9,7 @@
 #include "Utils.h"
 
 namespace library {
-	class Book :protected Database, protected Utils
+	class Book :protected Database
 	{
 	public:
 		bool createBook();
