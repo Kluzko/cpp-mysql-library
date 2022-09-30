@@ -37,15 +37,17 @@ I used to created this database.
 * books
   - creating books [*]
   - showing all books by title with genre and author [*]
-  - showing last added books [*]
+  - showing last 20 added/borrowed books [*]
+  - showing most borrowed books [*]
 * members 
   - creating members [*]
-  - showing most active members []
+  - showing most active members [*]
   - showing all members by name and books they borrow []
 * borrowing books 
-  - borrowing book []
-  - member cant borrow book witch is borrowed []
-  - member can borrow maximum of 5 books
+  - borrowing book [*]
+  - returning book [*]
+  - member cannot borrow a book that has already been rented [*]
+  - member can borrow maximum of 5 books [*]
 ## Additon info
 
 I created this project to practice cpp and mysql . I don't recommend following the code written in it. If you want to use this project anyway, please let me know if you find any mistakes. My mail is kluzniakkuba@gmail.com . 
