@@ -4,15 +4,11 @@ using namespace library;
 
 void Member::createMember()
 {
-	std::cout << "Adding new member\n";
 	std::string name = getString("Name: ", 100);
 
-	std::string insertMember = "INSERT INTO members(name) VALUES ('" + name + "')";
-
-	MYSQL_RES* res = exec_query(insertMember.c_str());
-
-	std::cout << "Author  successfully added to database";
-	mysql_free_result(res);
+	std::string insertMember = "INSERT INTO member(name) VALUES ('" + name + "')";
+	
+	queryToDatabase(insertMember, "Author  successfully added to database");
 }
 
 std::string Member::getMember()
@@ -49,14 +45,9 @@ void Member::printBorrowedBooks(std::string memberId)
         INNER JOIN members ON borrowed_books.member_id = members.member_id)\
         WHERE borrowed_books.member_id = " + memberId + " AND borrowed_books.isReturned = 0";
 
-	MYSQL_RES* res = exec_query(borrowedBooksQuery.c_str());
-	MYSQL_ROW row;
 	std::cout << "You have " << len << " books to return ! \n";
 	std::cout << "===============================================\n";
-	while ((row = mysql_fetch_row(res)) != NULL) {
-		std::cout << row[0] << ") " << "Title " << row[1] << ", Borrowed " << row[2] << "\n";
-	}
-	mysql_free_result(res);
+	readFromDatabase(borrowedBooksQuery);
 }
 
 int Member::numOfBorrowedBook(std::string memberId)
@@ -86,7 +77,7 @@ bool Member::canBorrowNewBook(bool printInfo, std::string memberId)
 		}
 
 		// If user has less than 5 not returned books can borrow book
-		if (len <= MAX_NUM_OF_BORROWED_BOOKS) {
+		if ((unsigned) len <= MAX_NUM_OF_BORROWED_BOOKS) {
 			return true;
 		}
 
@@ -117,13 +108,8 @@ std::string Member::getBrrowedBookId(std::string memberId)
 
 void Member::showAllMembers()
 {
-	std::string query = "SELECT member_id,name,created_at FROM members";
-	MYSQL_RES* res = exec_query(query.c_str());
-	MYSQL_ROW row;
-	while ((row = mysql_fetch_row(res)) != NULL) {
-		std::cout << row[0] << ")" << " Member name: " << row[1] << " | created_at: " << row[2] << "\n";
-	}
-	mysql_free_result(res);
+	std::string query = "SELECT member_id,name FROM members";
+	readFromDatabase(query);
 }
 
 void library::Member::showMostActiveMembers(int limit)

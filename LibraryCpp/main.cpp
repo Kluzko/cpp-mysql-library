@@ -5,6 +5,7 @@
 #include "LibraryManagment.h"
 #include "Utils.h"
 
+
 int main() {
 	library::LibraryManagment lib;
 	library::Member m;
@@ -38,7 +39,7 @@ int main() {
 			std::cout << "9) Show 5 most active members\n";
 			std::cout << "10) Show 20 latest books\n";
 			std::cout << "11) Show books 20 last borrowed books\n\n";
-			int num =getNumberWithLimit("Your choice: ", 10);
+			int num =getNumberWithLimit("Your choice: ", 11);
 
 			switch (num)
 			{

@@ -22,9 +22,9 @@ bool Book::createBook()
 		if (userChoice()) {
 			std::string creatBookQuery = "INSERT INTO books(title,genre_id,author_id) VALUES \
         ('" + title + "'," + genreId + "," + authorId + ")";
-			MYSQL_RES* res = exec_query(creatBookQuery.c_str());
-			std::cout << "Book successfully added to database.\n";
-			mysql_free_result(res);
+			
+			queryToDatabase(creatBookQuery, "Book successfully added to database");
+
 			return true;
 		}
 		std::cout << "Creating book operation aborted.\n";
@@ -71,19 +71,14 @@ void Book::showBookBeforeAdd(std::string title, std::string authorId, std::strin
 void Book::showAllBooks()
 {
 	// search for books displayed with genre and author
-	std::string searchForBooks = "SELECT books.title,authors.name,genres.genre FROM((books\
+	std::string searchForBooks = "SELECT books.title,authors.name,genres.genre,books.isBorrowed FROM((books\
                 INNER JOIN genres ON books.genre_id = genres.genre_id) \
                 INNER JOIN authors ON books.author_id = authors.author_id)";
 
-	MYSQL_RES* res = exec_query(searchForBooks.c_str());
-	MYSQL_ROW row;
+	
 	std::cout << "Showing books available in library\n";
 	std::cout << "===============================================\n";
-	while ((row = mysql_fetch_row(res)) != NULL) {
-		std::cout << "Title: " << row[0] << " | Author: " << row[1] << " | Genre: " << row[2] << "\n";
-	}
-
-	mysql_free_result(res);
+	readFromDatabase(searchForBooks);
 }
 
 std::string Book::getBook()
@@ -227,16 +222,12 @@ bool Book::showBooksByCategory()
                 INNER JOIN authors ON books.author_id = authors.author_id) WHERE genres.genre_id = " + genreId + "";
 
 		int len = checkLength(showBooksByCategory);
-		MYSQL_RES* res = exec_query(showBooksByCategory.c_str());
+		
 
 		if (len > 0) {
-			MYSQL_ROW row;
-			std::cout << "Find " << len << " books for this category \n";
+			std::cout << "Finded " << len << " books for this category \n";
 			std::cout << "===============================================\n";
-			while ((row = mysql_fetch_row(res)) != NULL) {
-				std::cout << "Title: " << row[0] << " | Author: " << row[1] << " | Genre: " << row[2] << "\n";
-			}
-
+			readFromDatabase(showBooksByCategory);
 			return true;
 		}
 		std::cout << "No books found in this category";
@@ -264,16 +255,11 @@ bool Book::showBooksByAuthor()
                 INNER JOIN authors ON books.author_id = authors.author_id) WHERE authors.author_id = " + authorId + "";
 
 		int len = checkLength(showBooksByAuthor);
-		MYSQL_RES* res = exec_query(showBooksByAuthor.c_str());
 
 		if (len > 0) {
-			MYSQL_ROW row;
-			std::cout << "Find" << len << "books by this author \n";
+			std::cout << "Finded " << len << " books by this author \n";
 			std::cout << "===============================================\n";
-			while ((row = mysql_fetch_row(res)) != NULL) {
-				std::cout << "Title: " << row[0] << " | Author: " << row[1] << " | Genre: " << row[2] << "\n";
-			}
-			mysql_free_result(res);
+			readFromDatabase(showBooksByAuthor);
 			return true;
 		}
 
@@ -312,14 +298,10 @@ void Book::showBooksBorrowState(int limit, bool showBorrowed)
 		if (len < limit) {
 			std::cout << "You have only " << len << " in your database \n";
 		}
-		MYSQL_RES* res = exec_query(query.c_str());
-		MYSQL_ROW row;
+		
 		std::cout << "Finded " << len << borrowMsg << "\n";
 		std::cout << "===============================================\n";
-		while ((row = mysql_fetch_row(res)) != NULL) {
-			std::cout << "Title: " << row[0] << " | Author: " << row[1] << "| Genre: " << row[2] << " | Created at:  " << row[3] << "\n";
-		}
-		mysql_free_result(res);
+		readFromDatabase(query);
 	}
 }
 
@@ -345,14 +327,8 @@ void Book::showLatestBooks(int limit)
 		if (len < limit) {
 			std::cout << "You have only " << len << " in your database \n";
 		}
-
-		MYSQL_RES* res = exec_query(latestBooks.c_str());
-		MYSQL_ROW row;
 		std::cout << "Finded " << len << " latest books." << "\n";
 		std::cout << "===============================================\n";
-		while ((row = mysql_fetch_row(res)) != NULL) {
-			std::cout << "Title: " << row[0] << " | Author: " << row[1] << " | Genre: " << row[2] << " | Created at:  " << row[3] << "\n";
-		}
-		mysql_free_result(res);
+		readFromDatabase(latestBooks);
 	}
 }

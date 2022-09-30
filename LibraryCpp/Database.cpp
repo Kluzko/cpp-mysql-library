@@ -1,5 +1,7 @@
 #include "Database.h"
 #include "Credentials.h"
+
+
 using namespace library;
 
 Database::Database()
@@ -7,8 +9,8 @@ Database::Database()
 	MYSQL* conn = mysql_init(NULL);
 	if (!mysql_real_connect(conn, HOST, USER, PASSWD, DB_NAME, PORT, NULL, 0)) {
 		// If Db doesnt connect throw error
-		std::cout << "Connection error: " << mysql_error(conn) << std::endl;
-		exit(1);
+		throw mysql_error(conn);
+		
 	}
 	_conn = conn;
 }
@@ -132,10 +134,9 @@ std::string Database::lastInsertedId()
 	Insert value to mysql and return its id
 	@return id from mysql db
 */
-std::string Database::insertValueAndReturnId(const std::string& query)
+std::string Database::insertValueAndReturnId(const std::string query)
 {
-	MYSQL_RES* res = exec_query(query.c_str());
-	mysql_free_result(res);
+	queryToDatabase(query, "Succesfull new author add.");
 	std::string id = lastInsertedId();
 	return id;
 }
@@ -156,3 +157,86 @@ int Database::checkLength(std::string query)
 	mysql_free_result(res);
 	return len;
 }
+
+void Database::queryToDatabase(const std::string query,const std::string msg)
+{
+	try
+	{
+		MYSQL_RES* res = exec_query(query.c_str());
+		mysql_free_result(res);
+		std::cout << msg;
+	}
+	catch (const char * msg)
+	{
+		std::cout << "Connection error: " << msg << "\n";
+	}
+}
+
+void Database::readFromDatabase(const std::string query)
+{
+	try
+	{
+		
+		MYSQL_RES* res = exec_query(query.c_str());
+
+		std::vector<std::string> tableNames;
+		
+	
+		MYSQL_FIELD* f{};
+		while (f = mysql_fetch_field(res)) {
+			tableNames.push_back(f->name);
+		}
+
+		
+		MYSQL_ROW row{};
+		const std::size_t size = tableNames.size();
+		
+		while ((row = mysql_fetch_row(res)) != NULL) {
+			for (std::size_t i = 0; i < size; i++) {
+				size_t findedId = tableNames[i].find("_id");
+				size_t findIsBorrowed = tableNames[i].find("isBorrowed");
+				size_t findIsReturned = tableNames[i].find("isReturned");
+
+				if (findedId != std::string::npos) {
+					std::cout << row[i] << ") ";
+				}
+				else if ((findIsBorrowed != std::string::npos) || (findIsReturned != std::string::npos)) {
+					if (i == size - 1) {
+						if ((std::string)row[i] == "0") {
+							std::cout << tableNames[i] << ": " << "No";
+						}
+						else {
+							std::cout << tableNames[i] << ": " << "Yes";
+						}
+					}
+					else {
+						if ((std::string)row[i] == "0") {
+							std::cout << tableNames[i] << ": " << "No" << " | ";
+						}
+						else {
+							std::cout << tableNames[i] << ": " << "Yes" << " | ";
+						}
+					}
+					
+				}
+				else if (i == size -1) {
+					std::cout << tableNames[i] << ": " << row[i];
+				}
+				else {
+					std::cout << tableNames[i] << ": " << row[i] << " | ";
+				}
+			}
+			std::cout << "\n";
+		}
+		
+		mysql_free_result(res);
+	
+		
+	}
+	catch (const char* msg)
+	{
+		std::cout << "Connection error: " << msg << "\n";
+	}
+}
+
+

@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <mysql.h>
+#include <algorithm>
 #include <vector>
 
 namespace library {
@@ -21,8 +22,11 @@ namespace library {
 		std::vector<std::string> returnBooksBorrowedByUser(std::string memberId);
 		void showFullTable(const std::string& table, std::vector<std::string>& returnedIds);
 		std::string lastInsertedId();
-		std::string insertValueAndReturnId(const std::string& query);
+		std::string insertValueAndReturnId(const std::string query);
 		int checkLength(std::string query);
+		
+		void queryToDatabase(const std::string query, const std::string msg);
+		void readFromDatabase(const std::string query);
 	};
 };
 
