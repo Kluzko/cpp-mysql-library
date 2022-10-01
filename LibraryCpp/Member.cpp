@@ -36,7 +36,7 @@ std::string Member::getMember()
 	return std::to_string(member_num);
 }
 
-void Member::printBorrowedBooks(std::string memberId)
+void Member::_printBorrowedBooks(std::string memberId)
 {
 	int len = numOfBorrowedBook(memberId);
 	std::string borrowedBooksQuery = "SELECT borrowed_books.borrowedBooks_id,books.title,\
@@ -73,7 +73,7 @@ bool Member::canBorrowNewBook(bool printInfo, std::string memberId)
 		int len = numOfBorrowedBook(memberId);
 
 		if (len > 0 && printInfo) {
-			printBorrowedBooks(memberId);
+			_printBorrowedBooks(memberId);
 		}
 
 		// If user has less than 5 not returned books can borrow book
@@ -96,7 +96,7 @@ std::string Member::getBrrowedBookId(std::string memberId)
 		throw "No member specified \n";
 	}
 
-	printBorrowedBooks(memberId);
+	_printBorrowedBooks(memberId);
 
 	std::vector<std::string> booksId = returnBooksBorrowedByUser(memberId);
 

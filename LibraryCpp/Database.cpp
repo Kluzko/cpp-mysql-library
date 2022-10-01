@@ -121,7 +121,7 @@ void Database::showFullTable(const std::string& table, std::vector<std::string>&
 	This function gives last inserted id from db.
 	@return id from mysql db
 */
-std::string Database::lastInsertedId()
+std::string Database::_lastInsertedId()
 {
 	MYSQL_RES* res = exec_query("SELECT last_insert_id()");
 	MYSQL_ROW row = mysql_fetch_row(res);
@@ -137,7 +137,7 @@ std::string Database::lastInsertedId()
 std::string Database::insertValueAndReturnId(const std::string query)
 {
 	queryToDatabase(query, "Succesfull new author add.");
-	std::string id = lastInsertedId();
+	std::string id = _lastInsertedId();
 	return id;
 }
 

@@ -12,14 +12,9 @@ namespace library {
 	class Book :protected Database
 	{
 	public:
+		Book() = default;
+
 		bool createBook();
-		void showBookBeforeAdd(std::string title, std::string authorId, std::string genreId);
-
-		std::string getBook();
-		std::string getGenre();
-		std::string getAuthor(bool canAddNewAuthor);
-		std::string getBookInLibrary();
-
 		bool showBooksByCategory();
 		bool showBooksByAuthor();
 
@@ -27,6 +22,13 @@ namespace library {
 		void showLatestBooks(int limit);
 		void showMostBorrowedBooks(int limit);
 		void showAllBooks();
+	protected:
+		std::string getBookInLibrary();
+
+	private:
+		void _showBookBeforeAdd(std::string title, std::string authorId, std::string genreId);
+		std::string _getGenre();
+		std::string _getAuthor(bool canAddNewAuthor);
 	};
 };
 

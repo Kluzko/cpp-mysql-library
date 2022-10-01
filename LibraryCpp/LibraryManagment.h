@@ -12,7 +12,7 @@ namespace library {
 	class LibraryManagment : protected Member, protected Book
 	{
 	public:
-		void borrowBook();
+		void borrowBook ();
 		void returnTheBook();
 	};
 }

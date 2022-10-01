@@ -11,17 +11,20 @@ namespace library {
 	class Member : protected Database
 	{
 	public:
-		void createMember();
+		Member() = default;
+
 		std::string getMember();
-		void printBorrowedBooks(std::string memberId);
-		int numOfBorrowedBook(std::string memberId);
-		bool canBorrowNewBook(bool printInfo, std::string memberId);
 		std::string getBrrowedBookId(std::string memberId);
+
+		void createMember();
 		void showAllMembers();
 		void showMostActiveMembers(int limit);
-
+	protected:
+		bool canBorrowNewBook(bool printInfo, std::string memberId);
+		int numOfBorrowedBook(std::string memberId);
 	private:
 		unsigned int MAX_NUM_OF_BORROWED_BOOKS = 5;
+		void _printBorrowedBooks(std::string memberId);
 	};
 }
 

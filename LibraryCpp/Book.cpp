@@ -11,11 +11,11 @@ bool Book::createBook()
 	{
 		std::string title = getString("Title: ", 50);
 
-		std::string genreId = getGenre();
-		std::string authorId = getAuthor(true);
+		std::string genreId = _getGenre();
+		std::string authorId = _getAuthor(true);
 
 		std::cout << "Your book values\n";
-		showBookBeforeAdd(title, authorId, genreId);
+		_showBookBeforeAdd(title, authorId, genreId);
 
 		std::cout << "\nDo you want to save the book.\n";
 
@@ -43,7 +43,7 @@ bool Book::createBook()
 	@param authorId - this is author id from table authors
 	@param genreId - this is genre id from table genres
 */
-void Book::showBookBeforeAdd(std::string title, std::string authorId, std::string genreId)
+void Book::_showBookBeforeAdd(std::string title, std::string authorId, std::string genreId)
 {
 	std::string getAuthor = "SELECT authors.name FROM authors WHERE author_id = " + authorId + " ";
 	std::string getGenre = "SELECT genres.genre FROM genres WHERE genre_id = " + genreId + "";
@@ -81,36 +81,11 @@ void Book::showAllBooks()
 	readFromDatabase(searchForBooks);
 }
 
-std::string Book::getBook()
-{
-	std::string book = getString("Book Title: ", 100);
-	std::vector<std::string> booksId;
-	if (!showSearchedQuery("books", "title", book, booksId)) {
-		std::cout << "No values found. Would you like to try gain?\n";
-		if (userChoice()) {
-			std::string book = getString("Title: ", 100);
-			bool isGenreFinded = showSearchedQuery("books", "title", book, booksId);
-			// if second time no val show full list
-			if (!isGenreFinded) {
-				throw "Error: Book not found";
-			}
-		}
-		else {
-			throw "Error: Book not found";
-		}
-	}
-
-	std::cout << "\nChoose number from the list\n";
-	int book_num = getNumberFromProvided(booksId);
-
-	return std::to_string(book_num);
-}
-
 /*
 	Function to select genre
 	@return genre id
 */
-std::string Book::getGenre()
+std::string Book::_getGenre()
 {
 	std::string genre = getString("Genre: ", 50);
 	std::vector<std::string> genresId;
@@ -142,7 +117,7 @@ std::string Book::getGenre()
 	@param canAddNewAuthor - specyfy if function should add new author if not finded in mysql db.
 	@return author id
 */
-std::string Book::getAuthor(bool canAddNewAuthor)
+std::string Book::_getAuthor(bool canAddNewAuthor)
 {
 	std::string author = getString("Author: ", 100);
 	//this var is only called when author is created
@@ -216,7 +191,7 @@ bool Book::showBooksByCategory()
 {
 	try
 	{
-		std::string genreId = getGenre();
+		std::string genreId = _getGenre();
 		std::string showBooksByCategory = "SELECT books.title,authors.name,genres.genre FROM((books\
                 INNER JOIN genres ON books.genre_id = genres.genre_id) \
                 INNER JOIN authors ON books.author_id = authors.author_id) WHERE genres.genre_id = " + genreId + "";
@@ -249,7 +224,7 @@ bool Book::showBooksByAuthor()
 {
 	try
 	{
-		std::string authorId = getAuthor(false);
+		std::string authorId = _getAuthor(false);
 		std::string showBooksByAuthor = "SELECT books.title,authors.name,genres.genre FROM((books\
                 INNER JOIN genres ON books.genre_id = genres.genre_id) \
                 INNER JOIN authors ON books.author_id = authors.author_id) WHERE authors.author_id = " + authorId + "";
