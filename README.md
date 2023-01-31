@@ -1,21 +1,19 @@
 # Cpp-mysql library
 
-It`s console aplication build for library managmet system.It was created ,becouse I want  to gain more expirience in cpp language and in mysql.
-
+This is a console application built for a library management system. It was created to provide more experience in both C++ and MySQL.
 
 ## Prerequisite
 
-First you need to install mysql connector and mysql server.
 
-For me best way to do this was install it from installer:
+Before using this application, you must install the MySQL Connector and MySQL Server. The best way to do this is by downloading and installing from the following link:
 https://dev.mysql.com/downloads/installer/
 
-Im using 
+I have used the following versions:
 
-MySQL Server 8.0.30
-Connector/C++ 8.0.30
+- MySQL Server 8.0.30
+- Connector/C++ 8.0.30
 
-And second thing are credentials
+Additionally, you will need to have the following credentials:
 
 ```cpp
 const char* HOST = "your host"; // for local database localhost
@@ -27,12 +25,13 @@ const int PORT = 3306; //here port number standard is 3306
 
 ## MYSQL schema
 
-I added to the project file called library.sql. There are queries 
-I used to created this database.
+The project file, library.sql, contains the queries used to create the database. You can view a screenshot of the schema below:
 
 ![MySQL schema screenshot](librarySchema.png?raw=true "MySQL schema screenshot")
 
 ## Project features
+
+The library management system has the following features:
 
 * books
   - creating books [*]
@@ -50,4 +49,4 @@ I used to created this database.
   - member can borrow maximum of 5 books [*]
 ## Additon info
 
-I created this project to practice cpp and mysql . I don't recommend following the code written in it. If you want to use this project anyway, please let me know if you find any mistakes. My mail is kluzniakkuba@gmail.com . 
+This project was created to practice C++ and MySQL and is not meant to be used as a reference for best practices. However, if you still choose to use it, please let the author know if you encounter any mistakes by sending an email to kluzniakkuba@gmail.com.
